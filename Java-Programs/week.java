@@ -32,6 +32,9 @@ public class week {
                 break;
             default:
                 System.out.println("Enter a valid number (1-7)");
+
+            scanner.close();
+            
         }
     }
 }
