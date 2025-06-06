@@ -11,9 +11,9 @@ class Radius {
         System.out.println("Enter your Radius: ");
         int r = sc.nextInt();
 
-        System.out.println("Area: " + (Math.PI * Math.pow(r, 2)));
-        System.out.println("Circumference: " + (2 * Math.PI * r));
-        System.out.println("Volume: " + ((4.0 / 3.0) * Math.PI * Math.pow(r, 3)));
+        System.out.printf("Area: %.2f\n", (Math.PI * Math.pow(r, 2)));
+        System.out.printf("Circumference: %.2f\n", (2 * Math.PI * r));
+        System.out.printf("Volume: %.2f\n", ((4.0 / 3.0) * Math.PI * Math.pow(r, 3)));
 
         sc.close();
 
