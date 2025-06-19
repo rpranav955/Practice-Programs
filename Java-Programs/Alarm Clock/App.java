@@ -9,7 +9,7 @@ class demo {
         Scanner sc = new Scanner(System.in);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalTime alarmTime = null;
-        String filePath = "Sizzr - Schwartzy.wav";
+        String filePath = "<add your name for wav file *here*>";
 
         while (alarmTime == null) {
             try {
