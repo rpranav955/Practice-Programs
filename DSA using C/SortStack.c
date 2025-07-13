@@ -83,7 +83,7 @@ int main()
     {
         int temp = pop(stack1, &top1);
 
-        while (top2 != -1 && peek(stack2, top2) > temp)
+        while (top2 != -1 && peek(stack2, top2) < temp)
         {
             push(stack1, pop(stack2, &top2), &top1);
         }
