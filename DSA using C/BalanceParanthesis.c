@@ -62,7 +62,6 @@ int main()
     char input[MAXSIZE];
     printf("Enter your paranthesis: ");
     fgets(input, MAXSIZE, stdin);
-    input[strcspn(input, "\n")] = '\0'; // removes newline from the input
     int flag = 0;
 
     for (int i = 0; i < strlen(input); i++)
