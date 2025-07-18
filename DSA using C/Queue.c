@@ -29,8 +29,8 @@ int Dequeue(int queue[]){
     }
 }
 
-void printArray(int a[], int n){
-    for(int i =0; i<n; i++){
+void printArray(int a[], int front, int rear){
+    for(int i =front; i<rear+1; i++){
         printf("%d ", a[i]);
     }
     printf("\n");
@@ -38,7 +38,7 @@ void printArray(int a[], int n){
 
 int main(){
     
-    int queue[]= {0,0,0,0,0,0,0,0,0,0};
+    int queue[MAXSIZE];
     
     bool isEnd = false;
 
@@ -61,7 +61,7 @@ int main(){
                     }
                     break;
 
-            case 3: printArray(queue, MAXSIZE);
+            case 3: printArray(queue, front, rear);
                     printf("\n");
                     break;
 
@@ -71,9 +71,6 @@ int main(){
             default: printf("Invalid Choice\n");
         }
     }
-    
-    
-    
-    
+
     return 0;
 }
