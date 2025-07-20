@@ -40,9 +40,10 @@ int Dequeue(int queue[]){
 }
 
 void printArray(int a[], int front, int rear){
-    for(int i =front; i<rear+1; i++){
+    for(int i =front; i!=rear; i = (i+1)%MAXSIZE){
         printf("%d ", a[i]);
     }
+    printf("%d ",a[rear]);
     printf("\n");
 }
 
