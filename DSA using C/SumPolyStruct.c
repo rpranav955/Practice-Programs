@@ -1,79 +1,94 @@
 #include <stdio.h>
 #define MAXSIZE 20
 
-typedef struct {
+typedef struct
+{
     float coeff;
     int exp;
 } Term;
 
-typedef struct{
-    Term terms[MAXSIZE];
+Term sum[MAXSIZE];
+int nsum = 0;
+
+int readPoly(Term a[])
+{
     int n;
-} Polynomial;
-
-void readPoly(Polynomial * a){
     printf("Enter the number of non-zero terms: ");
-    scanf("%d",&a->n);
+    scanf("%d", &n);
 
-    for(int i = 0; i < a->n; i++){
+    for (int i = 0; i < n; i++)
+    {
         printf("Enter the coefficient: ");
-        scanf("%f", &a->terms[i].coeff);
+        scanf("%f", &a[i].coeff);
         printf("Enter the exponent of x: ");
-        scanf("%d", &a->terms[i].exp);
+        scanf("%d", &a[i].exp);
     }
+
+    return n;
 }
 
-void printPoly(Polynomial a){
-    for(int i = 0; i < a.n; i++){
-        printf("%.2f x^%d",a.terms[i].coeff,a.terms[i].exp);
-        if(i != a.n -1){
+void printPoly(Term a[], int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        printf("%.2f x^%d", a[i].coeff, a[i].exp);
+        if (i != n - 1)
+        {
             printf(" + ");
         }
     }
     printf("\n");
 }
 
-Polynomial sum(Polynomial a, Polynomial b){
-    Polynomial sum;
-    sum.n = 0;
+void Sum(Term a[], int n1, Term b[], int n2)
+{
     int i = 0, j = 0;
 
-    while(i < a.n && j < b.n){
-        if(a.terms[i].exp == b.terms[j].exp){
-            sum.terms[sum.n].exp = a.terms[i].exp;
-            sum.terms[sum.n].coeff = a.terms[i].coeff + b.terms[j].coeff;
-            i++; j++;sum.n++;
+    while (i < n1 && j < n2)
+    {
+        if (a[i].exp == b[j].exp)
+        {
+            sum[nsum].exp = a[i].exp;
+            sum[nsum].coeff = a[i].coeff + b[j].coeff;
+            i++;
+            j++;
+            nsum++;
         }
-        else if(a.terms[i].exp > b.terms[j].exp){
-            sum.terms[sum.n++] = a.terms[i++];
+        else if (a[i].exp > b[j].exp)
+        {
+            sum[nsum++] = a[i++];
         }
-        else {
-            sum.terms[sum.n++] = b.terms[j++];
+        else
+        {
+            sum[nsum++] = b[j++];
         }
     }
-    while(i < a.n){
-            sum.terms[sum.n++] = a.terms[i++];
-        }
-    while(j < b.n){
-        sum.terms[sum.n++] = b.terms[j++];
+    while (i < n1)
+    {
+        sum[nsum++] = a[i++];
     }
-    return sum;
+    while (j < n2)
+    {
+        sum[nsum++] = b[j++];
+    }
 }
 
+int main()
+{
 
-
-int main(){
-    
-    Polynomial poly1,poly2,result;
+    Term poly1[MAXSIZE], poly2[MAXSIZE], result[MAXSIZE];
+    int n1, n2;
 
     printf("\nEnter your first polynomial: \n");
-    readPoly(&poly1);
+    n1 = readPoly(poly1);
 
     printf("\nEnter your second polynomial: \n");
-    readPoly(&poly2);
+    n2 = readPoly(poly2);
+
+    Sum(poly1, n1, poly2, n2);
 
     printf("\nSum of Polynomial 1 and 2: \n");
-    printPoly(sum(poly1, poly2));
-    
+    printPoly(sum, nsum);
+
     return 0;
 }
