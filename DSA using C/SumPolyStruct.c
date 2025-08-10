@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #define MAXSIZE 20
 
 typedef struct
@@ -6,9 +7,6 @@ typedef struct
     float coeff;
     int exp;
 } Term;
-
-Term sum[MAXSIZE];
-int nsum = 0;
 
 int readPoly(Term a[])
 {
@@ -31,7 +29,19 @@ void printPoly(Term a[], int n)
 {
     for (int i = 0; i < n; i++)
     {
-        printf("%.2f x^%d", a[i].coeff, a[i].exp);
+        if (a[i].exp == 0)
+        {
+            printf("%.1f", a[i].coeff);
+        }
+        else if (a[i].exp == 1)
+        {
+            printf("%.1f x", a[i].coeff);
+        }
+        else
+        {
+            printf("%.1f x^%d", a[i].coeff, a[i].exp);
+        }
+
         if (i != n - 1)
         {
             printf(" + ");
@@ -40,44 +50,60 @@ void printPoly(Term a[], int n)
     printf("\n");
 }
 
-void Sum(Term a[], int n1, Term b[], int n2)
+Term *Sum(Term a[], int n1, Term b[], int n2, int *nsum)
 {
-    int i = 0, j = 0;
+
+    Term *sum = (Term *)malloc((n1 + n2) * sizeof(Term));
+
+    if (sum == NULL)
+    {
+        printf("Memory allocation failed\n");
+        return NULL;
+    }
+
+    int i = 0, j = 0, z = 0;
 
     while (i < n1 && j < n2)
     {
         if (a[i].exp == b[j].exp)
         {
-            sum[nsum].exp = a[i].exp;
-            sum[nsum].coeff = a[i].coeff + b[j].coeff;
+            if (a[i].coeff + b[j].coeff != 0)
+            {
+                sum[z].exp = a[i].exp;
+                sum[z].coeff = a[i].coeff + b[j].coeff;
+                z++;
+            }
             i++;
             j++;
-            nsum++;
         }
         else if (a[i].exp > b[j].exp)
         {
-            sum[nsum++] = a[i++];
+            sum[z++] = a[i++];
         }
         else
         {
-            sum[nsum++] = b[j++];
+            sum[z++] = b[j++];
         }
     }
     while (i < n1)
     {
-        sum[nsum++] = a[i++];
+        sum[z++] = a[i++];
     }
     while (j < n2)
     {
-        sum[nsum++] = b[j++];
+        sum[z++] = b[j++];
     }
+
+    *nsum = z;
+
+    return sum;
 }
 
 int main()
 {
 
-    Term poly1[MAXSIZE], poly2[MAXSIZE], result[MAXSIZE];
-    int n1, n2;
+    Term poly1[MAXSIZE], poly2[MAXSIZE];
+    int n1, n2, nsum;
 
     printf("\nEnter your first polynomial: \n");
     n1 = readPoly(poly1);
@@ -85,10 +111,10 @@ int main()
     printf("\nEnter your second polynomial: \n");
     n2 = readPoly(poly2);
 
-    Sum(poly1, n1, poly2, n2);
+    Term *result = Sum(poly1, n1, poly2, n2, &nsum);
 
     printf("\nSum of Polynomial 1 and 2: \n");
-    printPoly(sum, nsum);
+    printPoly(result, nsum);
 
     return 0;
 }
