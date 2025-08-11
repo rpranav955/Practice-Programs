@@ -31,7 +31,7 @@ Matrix *convert(int row, int col, int a[][col], int count)
     }
 
     new[0].row = row;
-    new[0].col = row;
+    new[0].col = col;
     new[0].value = count;
 
     int z = 1;
