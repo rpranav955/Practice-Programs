@@ -163,12 +163,12 @@ int main()
 
     // convert 1
     Matrix *StructM1 = convert(row, col, mat1, count1);
-    printf("1:");
+    printf("\n1:");
     display(StructM1, count1);
 
     // convert 2
     Matrix *StructM2 = convert(row, col, mat2, count2);
-    printf("1:");
+    printf("\n2:");
     display(StructM2, count2);
 
     Matrix *result = sum(StructM1, count1, StructM2, count2, &nsum);
