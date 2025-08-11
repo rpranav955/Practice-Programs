@@ -125,5 +125,7 @@ int main()
     Matrix *transpose = Transpose(mStruct);
     display(transpose, count);
 
+    free(mStruct);
+    free(transpose);
     return 0;
 }
