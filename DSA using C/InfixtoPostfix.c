@@ -63,7 +63,6 @@ int precedence(char c){
 
 char* convert(char infix[]){
 	
-	top = -1;
 	char* postfix = (char*)malloc(maxSize * sizeof(char));
 	if(postfix == NULL){
 		printf("Memory allocation failed\n");
@@ -74,8 +73,11 @@ char* convert(char infix[]){
 	int num = 0;
 	
 	for(int i = 0; infix[i] != '\0'; i++){
-		if(isalnum(infix[i]) || infix[i] == '('){
+		if(isalnum(infix[i])){
 			postfix[num++] = infix[i];
+		}
+		else if(infix[i] == '('){
+			push(stack, infix[i]);
 		}
 		else if(infix[i] == ')'){
 			while(peek(stack) != '('){
