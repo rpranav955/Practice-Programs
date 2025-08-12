@@ -89,7 +89,7 @@ Matrix *sum(Matrix a[], int n1, Matrix b[], int n2, int *nsum)
             i++;
             z++;
         }
-        else if (a[i].row > b[j].row)
+        else
         {
             new[z].col = b[j].col;
             new[z].row = b[j].row;
