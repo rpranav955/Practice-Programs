@@ -55,25 +55,27 @@ char peek(char stack[])
 }*/
 
 int precedence(char c){
-	if(c=='^') return 3;
-	else if(c=='*' || c=='/') return 2;
-	else if(c=='+' || c=='-') return 1;
-	else return 0;
+	if(c=='^') {return 3;}
+	else if(c=='*' || c=='/') {return 2;}
+	else if(c=='+' || c=='-') {return 1;}
+	else {return 0;}
 }
 
 char* convert(char infix[]){
 	
+	top = -1;
 	char* postfix = (char*)malloc(maxSize * sizeof(char));
 	if(postfix == NULL){
 		printf("Memory allocation failed\n");
+		exit(1);
 	}
 	
 	char stack[maxSize];
 	int num = 0;
 	
 	for(int i = 0; infix[i] != '\0'; i++){
-		if(isdigit(infix[i]) || infix[i] == '('){
-			push(stack, infix[i]);
+		if(isalnum(infix[i]) || infix[i] == '('){
+			postfix[num++] = infix[i];
 		}
 		else if(infix[i] == ')'){
 			while(peek(stack) != '('){
@@ -86,13 +88,13 @@ char* convert(char infix[]){
 				postfix[num++] = pop(stack);
 			}
 			push(stack, infix[i]);
-		
-			
 		}
 	}
 	while(top != -1){
-			pop(stack);
+			postfix[num++] = pop(stack);
 	}
+	
+	postfix[num]= '\0';
 	
 	return postfix;
 	
@@ -107,7 +109,7 @@ int main()
     scanf("%s", infix);
     
     char* postfix = convert(infix);
-	 printf("%s\n", postfix);
+	 printf("Postfix: %s\n", postfix);
     
     free(postfix);
     
