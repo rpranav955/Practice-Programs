@@ -112,6 +112,55 @@ void addNodeAtIndex(Node *header, int position)
     ptr->next = newNode;
 }
 
+void delNodeAtFront(Node **headAddress)
+{
+    if (*headAddress == NULL)
+    {
+        printf("Empty List\n");
+        return;
+    }
+    Node *ptr = *headAddress;
+    *headAddress = ptr->next;
+    free(ptr);
+}
+
+void delNodeAtEnd(Node *header)
+{
+    if (header == NULL)
+    {
+        printf("Empty List\n");
+        return;
+    }
+    Node *ptr = header;
+    Node *prev;
+    while (ptr->next)
+    {
+        prev = ptr;
+        ptr = ptr->next;
+    }
+    prev->next = NULL;
+    free(ptr);
+}
+
+void delNodeAtIndex(Node *header, int position)
+{
+    if (header == NULL)
+    {
+        printf("Empty List\n");
+        return;
+    }
+    Node *ptr = header;
+    Node *prev;
+    while (position > 1)
+    {
+        prev = ptr;
+        ptr = ptr->next;
+        position--;
+    }
+    prev->next = ptr->next;
+    free(ptr);
+}
+
 int main()
 {
     Node *header = NULL;
@@ -151,6 +200,30 @@ int main()
 
             break;
         case 2:
+            printf("\n1.\tDelete node at front\n2.\tDelete node at end\n3.\tDelete at a position\n");
+            printf("\nEnter your choice: ");
+            scanf("%d", &choice2);
+
+            switch (choice2)
+            {
+            case 1:
+                delNodeAtFront(&header);
+                break;
+            case 2:
+                delNodeAtEnd(header);
+                break;
+            case 3:
+                int position;
+                printf("\nEnter the position of the node to be deleted: ");
+                scanf("%d", &position);
+                delNodeAtIndex(header, position);
+                break;
+
+            default:
+                printf("Invalid Choice\n");
+                break;
+            }
+
             break;
         case 3:
             printSLL(header);
