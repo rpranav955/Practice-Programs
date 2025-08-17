@@ -18,7 +18,7 @@ void push(char stack[], char item)
     }
 }
 
-void push(int stack[], int item)
+void pushint(int stack[], int item)
 {
     if (top == (maxSize - 1))
     {
@@ -45,7 +45,7 @@ char pop(char stack[])
     }
 }
 
-int pop(int stack[])
+int popint(int stack[])
 {
     if (top < 0)
     {
@@ -163,12 +163,12 @@ int posteval(char postfix[])
             char StringConv[2];
             StringConv[0] = postfix[i];
             StringConv[1] = '\0';
-            push(numbers, atoi(StringConv));
+            pushint(numbers, atoi(StringConv));
         }
         else
         {
-            int y = pop(numbers);
-            int x = pop(numbers);
+            int y = popint(numbers);
+            int x = popint(numbers);
             int result;
             char operater = postfix[i];
 
@@ -194,11 +194,11 @@ int posteval(char postfix[])
                 result = x - y;
                 break;
             }
-            push(numbers, result);
+            pushint(numbers, result);
         }
         i++;
     }
-    return pop(numbers);
+    return popint(numbers);
 }
 
 int main()
