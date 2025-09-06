@@ -103,9 +103,38 @@ void createNodeAtPos(Node **headAddress, Node **tailAddress)
     }
     while (pos >= 1)
     {
-
         pos--;
     }
+}
+
+void delNodeAtFront(Node **headAddress)
+{
+    if (!*headAddress)
+    {
+        printf("Empty List\n");
+        return;
+    }
+    Node *ptr = *headAddress;
+    *headAddress = ptr->next;
+    free(ptr);
+}
+
+void delNodeAtEnd(Node **tailAddress)
+{
+    if (!*tailAddress)
+    {
+        printf("Empty List\n");
+        return;
+    }
+    Node *ptr = *tailAddress;
+    while (ptr->next)
+    {
+        prev = ptr;
+        ptr = ptr->next;
+    }
+    prev->next = NULL;
+    *tailAddress = prev;
+    free(ptr);
 }
 
 int main()
@@ -155,10 +184,10 @@ int main()
             switch (choice2)
             {
             case 1:
-
+                delNodeAtFront(&header);
                 break;
             case 2:
-
+                delNodeAtEnd(&header, &tail);
                 break;
             case 3:
 
