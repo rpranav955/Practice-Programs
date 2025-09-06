@@ -62,30 +62,24 @@ Matrix *Transpose(Matrix a[])
         return NULL;
     }
 
-    new[0].col = a[0].row;
     new[0].row = a[0].col;
+    new[0].col = a[0].row;
     new[0].value = a[0].value;
 
-    for (int i = 1; i <= a[0].value; i++)
+    int i = 0;
+    int rownum = 1;
+    while (i < a[0].value)
     {
-        new[i].col = a[i].row;
-        new[i].row = a[i].col;
-        new[i].value = a[i].value;
-    }
-
-    Matrix temp;
-
-    for (int i = 1; i <= a[0].value; i++)
-    {
-        for (int j = 1; j <= a[0].value - i; j++)
+        for (int j = 1; j <= a[0].value; j++)
         {
-            if (new[j + 1].row < new[j].row)
+            if (i == a[j].col)
             {
-                temp = new[j];
-                new[j] = new[j + 1];
-                new[j + 1] = temp;
+                new[rownum].row = a[j].col;
+                new[rownum].col = a[j].row;
+                new[rownum++].value = a[j].value;
             }
         }
+        i++;
     }
 
     return new;
