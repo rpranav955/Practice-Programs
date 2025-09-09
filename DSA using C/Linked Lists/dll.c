@@ -24,6 +24,21 @@ void printDLL(Node *header)
     printf("\n");
 }
 
+void printDLLrev(Node *tail)
+{
+    if (!tail)
+    {
+        printf("Empty List\n");
+        return;
+    }
+    while (tail)
+    {
+        printf("%d ", tail->data);
+        tail = tail->prev;
+    }
+    printf("\n");
+}
+
 void createNodeAtFront(Node **headAddress, Node **tailAddress)
 {
     Node *newNode = (Node *)malloc(sizeof(Node));
@@ -90,21 +105,37 @@ void createNodeAtPos(Node **headAddress, Node **tailAddress)
     }
 
     int pos;
-    printf("Enter position to where the node should be placed: ");
+    printf("Enter position after which the node should be placed: ");
     scanf("%d", &pos);
     int item;
     printf("Enter data: ");
     scanf("%d", &item);
+    newNode->data = item;
 
     if (pos < 1)
     {
         printf("Invalid position\n");
         return;
     }
-    while (pos >= 1)
+    
+    Node *ptr = *headAddress; 
+    
+    while (pos != 1)
     {
+    	  ptr = ptr->next;
+    	  if (ptr->next == NULL)
+        {
+        		printf("Invalid Position");
+            return;
+        }
         pos--;
     }
+    
+    (ptr->next)->prev = newNode;
+    newNode->next = ptr->next;
+    ptr->next = newNode;
+    newNode->prev = ptr;
+    
 }
 
 void delNodeAtFront(Node **headAddress)
@@ -116,6 +147,7 @@ void delNodeAtFront(Node **headAddress)
     }
     Node *ptr = *headAddress;
     *headAddress = ptr->next;
+    (ptr->next)->prev = NULL;
     free(ptr);
 }
 
@@ -126,14 +158,11 @@ void delNodeAtEnd(Node **tailAddress)
         printf("Empty List\n");
         return;
     }
+    
     Node *ptr = *tailAddress;
-    while (ptr->next)
-    {
-        prev = ptr;
-        ptr = ptr->next;
-    }
-    prev->next = NULL;
-    *tailAddress = prev;
+    
+    (ptr->prev)->next = NULL;
+    *tailAddress = ptr->prev;
     free(ptr);
 }
 
@@ -149,7 +178,7 @@ int main()
     {
 
         printf("\n Double Linked List\n");
-        printf("\n1.\tCreate a new node\n2.\tDelete a node\n3.\tPrint the node\n4.\tStop\n");
+        printf("\n1.\tCreate a new node\n2.\tDelete a node\n3.\tPrint the node\n4.\tPrint the node in reverse\n5.\tStop\n");
         printf("\nEnter your choice: ");
         scanf("%d", &choice1);
 
@@ -187,7 +216,7 @@ int main()
                 delNodeAtFront(&header);
                 break;
             case 2:
-                delNodeAtEnd(&header, &tail);
+                delNodeAtEnd(&tail);
                 break;
             case 3:
 
@@ -200,7 +229,12 @@ int main()
         case 3:
             printDLL(header);
             break;
-        case 4:
+            
+		  case 4:
+            printDLLrev(tail);
+            break;
+
+        case 5:
             isEnd = true;
             break;
         default:
