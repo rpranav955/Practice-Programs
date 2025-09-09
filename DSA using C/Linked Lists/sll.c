@@ -153,6 +153,11 @@ void delNodeAtIndex(Node *header, int position)
     Node *prev;
     while (position > 1)
     {
+   	 if (ptr->next == NULL)
+        {
+            printf("Invalid position\n");
+            return;
+        }
         prev = ptr;
         ptr = ptr->next;
         position--;
