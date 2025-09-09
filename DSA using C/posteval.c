@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include <math.h>
+// #include <math.h>
 
 int top = -1;
 int maxSize = 50;
@@ -18,7 +18,7 @@ void push(char stack[], char item)
     }
 }
 
-void pushint(int stack[], int item)
+void pushint(double stack[], double item)
 {
     if (top == (maxSize - 1))
     {
@@ -45,7 +45,7 @@ char pop(char stack[])
     }
 }
 
-int popint(int stack[])
+double popint(double stack[])
 {
     if (top < 0)
     {
@@ -54,7 +54,7 @@ int popint(int stack[])
     }
     else
     {
-        int item = stack[top--];
+        double item = stack[top--];
         stack[top + 1] = 0;
         return item;
     }
@@ -152,10 +152,23 @@ char *convert(char infix[])
     return postfix;
 }
 
-int posteval(char postfix[])
+double mypow(double x, int y){
+
+	double result = 1;
+	
+	while(y != 0){
+		
+		result *= x;
+		y--;
+	}
+	
+	return result;
+}
+
+double posteval(char postfix[])
 {
     int i = 0;
-    int numbers[maxSize];
+    double numbers[maxSize];
     while (postfix[i] != '\0')
     {
         if (isdigit(postfix[i]))
@@ -167,15 +180,15 @@ int posteval(char postfix[])
         }
         else
         {
-            int y = popint(numbers);
-            int x = popint(numbers);
-            int result;
+            double y = popint(numbers);
+            double x = popint(numbers);
+            double result;
             char operater = postfix[i];
 
             switch (operater)
             {
             case '^':
-                result = pow(x, y);
+                result = mypow(x, y);
                 break;
 
             case '*':
@@ -212,7 +225,7 @@ int main()
     char *postfix = convert(infix);
     printf("Postfix: %s\n", postfix);
 
-    int result = posteval(postfix);
-    printf("Result: %d\n", result);
+    double result = posteval(postfix);
+    printf("Result: %.2f\n", result);
     return 0;
 }
