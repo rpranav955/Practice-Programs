@@ -117,28 +117,27 @@ void createNodeAtPos(Node **headAddress, Node **tailAddress)
         printf("Invalid position\n");
         return;
     }
-    
-    Node *ptr = *headAddress; 
-    
+
+    Node *ptr = *headAddress;
+
     while (pos != 1)
     {
-    	  ptr = ptr->next;
-    	  if (ptr->next == NULL)
+        ptr = ptr->next;
+        if (ptr->next == NULL)
         {
-        		printf("Invalid Position");
+            printf("Invalid Position");
             return;
         }
         pos--;
     }
-    
+
     (ptr->next)->prev = newNode;
     newNode->next = ptr->next;
     ptr->next = newNode;
     newNode->prev = ptr;
-    
 }
 
-void delNodeAtFront(Node **headAddress)
+void delNodeAtFront(Node **headAddress, Node **tailAddress)
 {
     if (!*headAddress)
     {
@@ -146,23 +145,67 @@ void delNodeAtFront(Node **headAddress)
         return;
     }
     Node *ptr = *headAddress;
-    *headAddress = ptr->next;
-    (ptr->next)->prev = NULL;
+    if (!ptr->next)
+    {
+        *headAddress = NULL;
+        *tailAddress = NULL;
+        free(ptr);
+        return;
+    }
+    *headAddress = (*headAddress)->next;
+    (*headAddress)->prev = NULL;
     free(ptr);
 }
 
-void delNodeAtEnd(Node **tailAddress)
+void delNodeAtEnd(Node **headAddress, Node **tailAddress)
 {
     if (!*tailAddress)
     {
         printf("Empty List\n");
         return;
     }
-    
+
     Node *ptr = *tailAddress;
-    
+
+    if (!ptr->next)
+    {
+        *headAddress = NULL;
+        *tailAddress = NULL;
+        free(ptr);
+        return;
+    }
     (ptr->prev)->next = NULL;
     *tailAddress = ptr->prev;
+    free(ptr);
+}
+
+void delNodeAtPos(Node **headAddress, Node **tailAddress)
+{
+    int pos;
+    printf("Enter position of the node to be deleted: ");
+    scanf("%d", &pos);
+
+    if (pos <= 1)
+    {
+        printf("Invalid position\n");
+        return;
+    }
+
+    Node *ptr = *headAddress;
+
+    while (pos != 1)
+    {
+        ptr = ptr->next;
+        if (ptr->next == NULL)
+        {
+            printf("Invalid Position");
+            return;
+        }
+        pos--;
+    }
+
+    (ptr->prev)->next = ptr->next;
+    (ptr->next)->prev = ptr->prev;
     free(ptr);
 }
 
@@ -213,13 +256,13 @@ int main()
             switch (choice2)
             {
             case 1:
-                delNodeAtFront(&header);
+                delNodeAtFront(&header, &tail);
                 break;
             case 2:
-                delNodeAtEnd(&tail);
+                delNodeAtEnd(&header, &tail);
                 break;
             case 3:
-
+                delNodeAtPos(&header, &tail);
                 break;
             default:
                 printf("Invalid Choice\n");
@@ -229,8 +272,8 @@ int main()
         case 3:
             printDLL(header);
             break;
-            
-		  case 4:
+
+        case 4:
             printDLLrev(tail);
             break;
 

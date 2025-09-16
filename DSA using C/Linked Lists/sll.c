@@ -153,7 +153,7 @@ void delNodeAtIndex(Node *header, int position)
     Node *prev;
     while (position > 1)
     {
-   	 if (ptr->next == NULL)
+        if (ptr->next == NULL)
         {
             printf("Invalid position\n");
             return;
@@ -170,7 +170,7 @@ int main()
 {
     Node *header = NULL;
     bool isEnd = false;
-    int choice1, choice2;
+    int choice1, choice2, position;
     while (!isEnd)
     {
         printf("\n1.\tCreate a new node\n2.\tDelete a node\n3.\tPrint the node\n4.\tStop\n");
@@ -192,7 +192,6 @@ int main()
                 addNodeAtEnd(&header);
                 break;
             case 3:
-                int position;
                 printf("\nEnter the position after which the new node should be added: ");
                 scanf("%d", &position);
                 addNodeAtIndex(header, position);
@@ -208,6 +207,7 @@ int main()
             printf("\n1.\tDelete node at front\n2.\tDelete node at end\n3.\tDelete at a position\n");
             printf("\nEnter your choice: ");
             scanf("%d", &choice2);
+            int position;
 
             switch (choice2)
             {
@@ -218,7 +218,6 @@ int main()
                 delNodeAtEnd(header);
                 break;
             case 3:
-                int position;
                 printf("\nEnter the position of the node to be deleted: ");
                 scanf("%d", &position);
                 delNodeAtIndex(header, position);
