@@ -120,18 +120,28 @@ void delNodeAtFront(Node **headAddress)
         return;
     }
     Node *ptr = *headAddress;
+    if(!ptr->next){
+        *headAddress = NULL;
+        free(ptr);
+        return;
+    }
     *headAddress = ptr->next;
     free(ptr);
 }
 
-void delNodeAtEnd(Node *header)
+void delNodeAtEnd(Node **headAddress)
 {
-    if (header == NULL)
+    if (*headAddress == NULL)
     {
         printf("Empty List\n");
         return;
     }
-    Node *ptr = header;
+    Node *ptr = *headAddress;
+    if(!(ptr->next)){
+        *headAddress = NULL;
+        free(ptr);
+        return;
+    }
     Node *prev;
     while (ptr->next)
     {
@@ -215,7 +225,7 @@ int main()
                 delNodeAtFront(&header);
                 break;
             case 2:
-                delNodeAtEnd(header);
+                delNodeAtEnd(&header);
                 break;
             case 3:
                 printf("\nEnter the position of the node to be deleted: ");
