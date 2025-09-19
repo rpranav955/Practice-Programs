@@ -167,7 +167,7 @@ void delNodeAtEnd(Node **headAddress, Node **tailAddress)
 
     Node *ptr = *tailAddress;
 
-    if (!ptr->next)
+    if (!ptr->prev)
     {
         *headAddress = NULL;
         *tailAddress = NULL;
