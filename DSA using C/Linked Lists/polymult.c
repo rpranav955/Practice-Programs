@@ -89,8 +89,9 @@ void multiplication(Node *header1, Node *header2, Node **multi){
 	Node *ptr1 = header1, *ptr2 = header2, *prev = NULL;
 	
 	while(ptr1){
+		ptr2 = header2;
 		while(ptr2){
-		
+			
 			Node *newNode = (Node *)malloc(sizeof(Node));
 			newNode->next = prev;
   			if (!newNode)
