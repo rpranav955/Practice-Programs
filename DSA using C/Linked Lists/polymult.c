@@ -68,6 +68,22 @@ void addNodeAtEnd(Node **headAddress)
     ptr->next = newNode;
 }
 
+void connect(Node **multi, Node *newNode){
+	if(!*multi){
+		*multi = newNode;
+		return; 
+	}
+	
+    Node *ptr = *multi;
+	
+   while (ptr->next)
+   {
+       ptr = ptr->next;
+   }
+   ptr->next = newNode;
+	
+}
+
 void multiplication(Node *header1, Node *header2, Node **multi){
 	
 	Node *ptr1 = header1, *ptr2 = header2, *prev = NULL;
@@ -85,6 +101,9 @@ void multiplication(Node *header1, Node *header2, Node **multi){
    	 	
 			newNode->coeff = ptr1->coeff * ptr2->coeff;
 			newNode->exp = ptr1->exp * ptr2->exp;
+			
+			connect(multi, newNode);
+			
 			ptr2 = ptr2->next;
 		}
 		ptr1 = ptr1->next;
@@ -126,6 +145,9 @@ int main(){
 	printSLL(header2);
 	
 	multiplication(header1, header2, &multi);
+	
+	printf("\nPoly1 x Poly2: "); 
+	printSLL(multi);
 	
 	return 0;
 }
