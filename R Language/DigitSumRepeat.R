@@ -13,6 +13,6 @@ sum_of_digits_repeat <- function(number){
 }
 
 num <- as.integer(readline("Enter your number: "))
-result <- sum_of_digits_while(num)
+result <- sum_of_digits_repeat(num)
 
-print(paste("Sum of digits using while loop: ", result))
+print(paste("Sum of digits using repeat loop: ", result))
