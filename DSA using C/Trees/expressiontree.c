@@ -1,3 +1,9 @@
+/*
+    i first converts infix equation
+    to postfix and then creates the bst
+    using the postfix equation
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>

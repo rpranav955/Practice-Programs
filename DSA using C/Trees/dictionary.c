@@ -38,21 +38,27 @@ void add(Node **root)
     else
     {
         Node *ptr = *root;
-        if (strcmp(newNode->word, ptr->word) < 0)
+        bool isPlaced = false;
+        while (!isPlaced)
         {
-            if (!ptr->left)
+            if (strcmp(newNode->word, ptr->word) < 0)
             {
-                ptr->left = newNode;
+                if (!ptr->left)
+                {
+                    ptr->left = newNode;
+                    isPlaced = true;
+                }
+                ptr = ptr->left;
             }
-            ptr = ptr->left;
-        }
-        else if (strcmp(newNode->word, ptr->word) > 0)
-        {
-            if (!ptr->right)
+            else if (strcmp(newNode->word, ptr->word) > 0)
             {
-                ptr->right = newNode;
+                if (!ptr->right)
+                {
+                    ptr->right = newNode;
+                    isPlaced = true;
+                }
+                ptr = ptr->right;
             }
-            ptr = ptr->right;
         }
     }
 }
@@ -97,7 +103,7 @@ int main()
     int choice;
     while (!isEnd)
     {
-        printf("1. Add word to dictionary\n2. Print dictionary\n3. Stop\n");
+        printf("\n1. Add word to dictionary\n2. Print dictionary\n3. Stop\n");
         scanf("%d", &choice);
 
         switch (choice)
@@ -112,7 +118,7 @@ int main()
                 break;
             }
             int choice2;
-            printf("1. Preorder\n2. Inorder\n3. Postorder\n");
+            printf("\n1. Preorder\n2. Inorder\n3. Postorder\n");
             scanf("%d", &choice2);
             switch (choice2)
             {
