@@ -1,5 +1,5 @@
 /*
-    i first converts infix equation
+    i first converted infix equation
     to postfix and then creates the bst
     using the postfix equation
 */
