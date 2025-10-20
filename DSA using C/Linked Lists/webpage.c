@@ -5,68 +5,160 @@
 
 typedef struct node
 {
-	char data[500];
+	int data;
 	struct node *next;
 	struct node *prev;
 } Node;
 
+Node *head = NULL;
+Node *tail = NULL;
+Node *curr = NULL;
+
+char *page(int num)
+{
+	switch (num)
+	{
+	case 1:
+		return "Home";
+	case 2:
+		return "About";
+	case 3:
+		return "Contact";
+	default:
+		return "";
+	}
+}
+
+void printHistory()
+{
+	if (!head)
+	{
+		printf("No Page Visited\n");
+		return;
+	}
+
+	Node *ptr = head;
+	do
+	{
+		printf("%s", page(ptr->data));
+		if (ptr->next)
+		{
+			printf(" -> ");
+			ptr = ptr->next;
+		}
+		else
+		{
+			break;
+		}
+
+	} while (true);
+	printf("\n");
+}
+
+void addPage(int num)
+{
+	if (curr)
+	{
+		if (curr->data == num)
+		{
+			printf("Currenty in that page!\n\n");
+			return;
+		}
+	}
+
+	Node *newNode = (Node *)malloc(sizeof(Node));
+	if (!newNode)
+	{
+		printf("Memory Allocation Failed!\n");
+		return;
+	}
+
+	newNode->data = num;
+	newNode->next = NULL;
+	newNode->prev = NULL;
+
+	if (!head)
+	{
+		head = newNode;
+		tail = newNode;
+		curr = newNode;
+
+		printf("Current Page: %s\n\n", page(curr->data));
+		printHistory();
+
+		return;
+	}
+
+	newNode->prev = tail;
+	tail->next = newNode;
+	tail = newNode;
+	curr = newNode;
+
+	printf("Current Page: %s\n\n", page(curr->data));
+	printHistory();
+}
+
 int main()
 {
-
-	Node page1, page2, page3;
 	bool isEnd = false;
-	char choice;
-
-	strcpy(page1.data, "\nPage1\n");
-	page1.next = &page2;
-	page1.prev = NULL;
-
-	strcpy(page2.data, "\nPage2\n");
-	page2.next = &page3;
-	page2.prev = &page1;
-
-	strcpy(page3.data, "\nPage3\n");
-	page3.next = NULL;
-	page3.prev = &page2;
-
-	Node *ptr = &page1;
-
-	printf("%s", ptr->data);
-
-	printf("\npress f for forward\npress b for backward\npress e to exit\n");
+	int choice;
 
 	while (!isEnd)
 	{
-
-		scanf("%c", &choice);
+		printf("\n1. Home\n2. About\n3. Contact\n4. Previous Page\n5. Forward Page\n6. Print History\n7. Stop\n\nEnter: ");
+		scanf("%d", &choice);
 
 		switch (choice)
 		{
-
-		case 'f':
-			if (!ptr->next)
+		case 1:
+			addPage(1);
+			break;
+		case 2:
+			addPage(2);
+			break;
+		case 3:
+			addPage(3);
+			break;
+		case 4:
+			if (!tail)
 			{
-				printf("Theres no page ahead\n");
+				printf("No Pages visited\n");
 				break;
 			}
-			ptr = ptr->next;
-			printf("%s", ptr->data);
-			break;
-
-		case 'b':
-			if (!ptr->prev)
+			if (!curr->prev)
 			{
-				printf("Theres no page behind\n");
+				printf("Theres no Previous Page\n");
 				break;
 			}
-			ptr = ptr->prev;
-			printf("%s", ptr->data);
+			curr = curr->prev;
+			printf("Current Page: %s\n\n", page(curr->data));
+			printHistory();
 			break;
-
-		case 'e':
+		case 5:
+			if (!head)
+			{
+				printf("No Pages visited\n");
+				break;
+			}
+			if (!curr->next)
+			{
+				printf("Theres no Forward Page\n");
+				break;
+			}
+			curr = curr->next;
+			printf("Current Page: %s\n\n", page(curr->data));
+			printHistory();
+			break;
+		case 6:
+			printHistory();
+			break;
+		case 7:
 			isEnd = true;
 			break;
+		default:
+			printf("Invalid Choice\n");
 		}
 	}
+
 	return 0;
 }
