@@ -173,7 +173,7 @@ int main()
 
     Matrix *result = sum(StructM1, count1, StructM2, count2, &nsum);
     printf("\nSum:");
-    display(result, nsum);
+    display(result, result[0].value);
 
     free(StructM1);
     free(StructM2);

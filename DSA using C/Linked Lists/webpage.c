@@ -89,8 +89,8 @@ void addPage(int num)
 		return;
 	}
 
-	newNode->prev = tail;
-	tail->next = newNode;
+	curr->next = newNode;
+	newNode->prev = curr;
 	tail = newNode;
 	curr = newNode;
 
