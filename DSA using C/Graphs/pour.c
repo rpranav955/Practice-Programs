@@ -1,163 +1,165 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX 11 // Since maximum water is 10 liters
+#define INF 999
+#define MAX_CAPACITY 11
+#define MAX_A 10
+#define MAX_B 7
+#define MAX_C 4
 
-typedef struct State {
-    int a, b, c; // Amounts in 10L, 7L, and 4L
-    struct State* parent; // To track the path
-} State;
+typedef struct node
+{
+    int a, b, c;
+    struct node *parent;
+} Node;
 
-typedef struct QueueNode {
-    State *state;
-    struct QueueNode *next;
+typedef struct queuenode
+{
+    Node *node;
+    struct queuenode *next;
 } QueueNode;
 
-typedef struct Queue {
-    QueueNode *front, *rear;
-} Queue;
+QueueNode *head = NULL, *tail = NULL;
 
-// Create a new state
-State* createState(int a, int b, int c, State *parent) {
-    State* newState = (State*)malloc(sizeof(State));
-    newState->a = a;
-    newState->b = b;
-    newState->c = c;
-    newState->parent = parent;
-    return newState;
+Node *createState(int a, int b, int c, Node *parent)
+{
+    Node *newNode = (Node *)malloc(sizeof(Node));
+
+    newNode->a = a;
+    newNode->b = b;
+    newNode->c = c;
+    newNode->parent = parent;
+
+    return newNode;
 }
 
-// Queue operations
-void initQueue(Queue *q) {
-    q->front = q->rear = NULL;
-}
+void enqueueNode(Node *item)
+{
+    QueueNode *newNode = (QueueNode *)malloc(sizeof(QueueNode));
+    newNode->node = item;
+    newNode->next = NULL;
 
-int isEmpty(Queue *q) {
-    return q->front == NULL;
-}
-
-void enqueue(Queue *q, State *state) {
-    QueueNode *temp = (QueueNode*)malloc(sizeof(QueueNode));
-    temp->state = state;
-    temp->next = NULL;
-    if (q->rear == NULL) {
-        q->front = q->rear = temp;
+    if (!head)
+    {
+        head = tail = newNode;
         return;
     }
-    q->rear->next = temp;
-    q->rear = temp;
+
+    tail->next = newNode;
+    tail = newNode;
+
+    return;
 }
 
-State* dequeue(Queue *q) {
-    if (q->front == NULL)
+Node *dequeueNode()
+{
+
+    if (!head)
+    {
         return NULL;
-    QueueNode *temp = q->front;
-    State *state = temp->state;
-    q->front = q->front->next;
-    if (q->front == NULL)
-        q->rear = NULL;
-    free(temp);
-    return state;
+    }
+
+    if (head == tail)
+    {
+        QueueNode *item = head;
+        head = tail = NULL;
+
+        return item->node;
+    }
+
+    QueueNode *item = head;
+    head = head->next;
+
+    return item->node;
 }
 
-// To print the path by tracing parents
-void printPath(State *state) {
-    if (state == NULL)
+void printPath(Node *curr)
+{
+    if (!curr)
+    {
         return;
-    printPath(state->parent);
-    printf("(%d, %d, %d)\n", state->a, state->b, state->c);
+    }
+    printPath(curr->parent);
+    printf("(%d, %d, %d)\n", curr->a, curr->b, curr->c);
 }
 
-// Function to perform pouring
-void pour(State *curr, Queue *q, int visited[MAX][MAX][MAX]) {
-    int A = curr->a, B = curr->b, C = curr->c;
-    int maxA = 10, maxB = 7, maxC = 4;
+int visitedStates[MAX_CAPACITY][MAX_CAPACITY][MAX_CAPACITY] = {0};
 
-    // All possible pourings:
+int main()
+{
+    enqueueNode(createState(0, 7, 4, NULL));
+    while (head)
+    {
+        Node *curr = dequeueNode();
 
-    // A->B
-    int pourAmt = (B + A > maxB) ? maxB - B : A;
-    if (pourAmt > 0) {
-        int na = A - pourAmt, nb = B + pourAmt, nc = C;
-        if (!visited[na][nb][nc]) {
-            visited[na][nb][nc] = 1;
-            enqueue(q, createState(na, nb, nc, curr));
-        }
-    }
+        int currA = curr->a;
+        int currB = curr->b;
+        int currC = curr->c;
 
-    // A->C
-    pourAmt = (C + A > maxC) ? maxC - C : A;
-    if (pourAmt > 0) {
-        int na = A - pourAmt, nb = B, nc = C + pourAmt;
-        if (!visited[na][nb][nc]) {
-            visited[na][nb][nc] = 1;
-            enqueue(q, createState(na, nb, nc, curr));
-        }
-    }
+        int pouramt, newA, newB, newC;
 
-    // B->A
-    pourAmt = (A + B > maxA) ? maxA - A : B;
-    if (pourAmt > 0) {
-        int na = A + pourAmt, nb = B - pourAmt, nc = C;
-        if (!visited[na][nb][nc]) {
-            visited[na][nb][nc] = 1;
-            enqueue(q, createState(na, nb, nc, curr));
-        }
-    }
-
-    // B->C
-    pourAmt = (C + B > maxC) ? maxC - C : B;
-    if (pourAmt > 0) {
-        int na = A, nb = B - pourAmt, nc = C + pourAmt;
-        if (!visited[na][nb][nc]) {
-            visited[na][nb][nc] = 1;
-            enqueue(q, createState(na, nb, nc, curr));
-        }
-    }
-
-    // C->A
-    pourAmt = (A + C > maxA) ? maxA - A : C;
-    if (pourAmt > 0) {
-        int na = A + pourAmt, nb = B, nc = C - pourAmt;
-        if (!visited[na][nb][nc]) {
-            visited[na][nb][nc] = 1;
-            enqueue(q, createState(na, nb, nc, curr));
-        }
-    }
-
-    // C->B
-    pourAmt = (B + C > maxB) ? maxB - B : C;
-    if (pourAmt > 0) {
-        int na = A, nb = B + pourAmt, nc = C - pourAmt;
-        if (!visited[na][nb][nc]) {
-            visited[na][nb][nc] = 1;
-            enqueue(q, createState(na, nb, nc, curr));
-        }
-    }
-}
-
-int main() {
-    Queue q;
-    initQueue(&q);
-
-    int visited[MAX][MAX][MAX] = {0};
-
-    State *start = createState(0, 7, 4, NULL);
-    enqueue(&q, start);
-    visited[0][7][4] = 1;
-
-    while (!isEmpty(&q)) {
-        State *curr = dequeue(&q);
-
-        if (curr->b == 2 || curr->c == 2) {
-            printf("\nSolution path:\n");
+        if (currB == 2 || currC == 2)
+        {
+            printf("Solution Path Found:\n");
             printPath(curr);
             return 0;
         }
 
-        pour(curr, &q, visited);
+        // A -> B
+        pouramt = (currA + currB > MAX_B) ? MAX_B - currB : currA;
+        newA = currA - pouramt, newB = currB + pouramt, newC = currC;
+        if (visitedStates[newA][newB][newC] != 1)
+        {
+            visitedStates[newA][newB][newC] = 1;
+            enqueueNode(createState(newA, newB, newC, curr));
+        }
+
+        // A -> C
+        pouramt = (currA + currC > MAX_C) ? MAX_C - currC : currA;
+        newA = currA - pouramt, newB = currB, newC = currC + pouramt;
+        if (visitedStates[newA][newB][newC] != 1)
+        {
+            visitedStates[newA][newB][newC] = 1;
+            enqueueNode(createState(newA, newB, newC, curr));
+        }
+
+        // B -> A
+        pouramt = (currB + currA > MAX_A) ? MAX_A - currA : currB;
+        newA = currA + pouramt, newB = currB - pouramt, newC = currC;
+        if (visitedStates[newA][newB][newC] != 1)
+        {
+            visitedStates[newA][newB][newC] = 1;
+            enqueueNode(createState(newA, newB, newC, curr));
+        }
+
+        // B -> C
+        pouramt = (currB + currC > MAX_C) ? MAX_C - currC : currB;
+        newA = currA, newB = currB - pouramt, newC = currC + pouramt;
+        if (visitedStates[newA][newB][newC] != 1)
+        {
+            visitedStates[newA][newB][newC] = 1;
+            enqueueNode(createState(newA, newB, newC, curr));
+        }
+
+        // C -> A
+        pouramt = (currA + currC > MAX_A) ? MAX_A - currA : currC;
+        newA = currA + pouramt, newB = currB, newC = currC - pouramt;
+        if (visitedStates[newA][newB][newC] != 1)
+        {
+            visitedStates[newA][newB][newC] = 1;
+            enqueueNode(createState(newA, newB, newC, curr));
+        }
+
+        // C -> B
+        pouramt = (currB + currC > MAX_B) ? MAX_B - currB : currC;
+        newA = currA, newB = currB + pouramt, newC = currC - pouramt;
+        if (visitedStates[newA][newB][newC] != 1)
+        {
+            visitedStates[newA][newB][newC] = 1;
+            enqueueNode(createState(newA, newB, newC, curr));
+        }
     }
 
-    printf("No solution found.\n");
+    printf("No Solution Path found\n");
     return 0;
 }
