@@ -154,40 +154,17 @@ int main()
     scanf("%s", infix);
     createExpressionTree(infix);
 
-    int isEnd = 0;
+    printf("Inorder: ");
+    inorder(root);
+    printf("\n");
 
-    while (!isEnd)
-    {
-        int choice;
+    printf("Preorder: ");
+    preorder(root);
+    printf("\n");
 
-        printf("\nPrint the Expression Tree:\n");
-        printf("\n1. InOrder\n2. PreOrder\n3. PostOrder\n\n0. Exit\n");
-        scanf("%d", &choice);
-
-        switch (choice)
-        {
-        case 1:
-            printf("\nInorder: ");
-            inorder(root);
-            printf("\n");
-            break;
-        case 2:
-            printf("\nPreorder: ");
-            preorder(root);
-            printf("\n");
-            break;
-        case 3:
-            printf("\nPostorder: ");
-            postorder(root);
-            printf("\n");
-            break;
-        case 0:
-            isEnd = 1;
-            break;
-        default:
-            printf("Invalid Input\n");
-        }
-    }
+    printf("Postorder: ");
+    postorder(root);
+    printf("\n");
 
     return 0;
 }
